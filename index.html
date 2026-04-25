@@ -16,13 +16,8 @@
     --accent: #7c5cfc;
     --accent2: #fc5c8a;
     --accent3: #5cfce0;
-    --happy: #ffd166;
-    --sad: #5c8afc;
-    --angry: #fc5c5c;
-    --tired: #9b8ec4;
-    --neutral: #8884a0;
-    --radius: 16px;
-    --radius-sm: 10px;
+    --radius: 18px;
+    --radius-sm: 12px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,76 +28,83 @@
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
-    transition: all 0.6s ease;
+    transition: background 0.6s ease;
   }
 
   body.mood-happy { --accent: #ffd166; --accent2: #ff9f43; }
-  body.mood-sad { --accent: #5c8afc; --accent2: #a29bfe; }
+  body.mood-sad   { --accent: #5c8afc; --accent2: #a29bfe; }
   body.mood-angry { --accent: #fc5c5c; --accent2: #fd79a8; }
   body.mood-tired { --accent: #9b8ec4; --accent2: #6c5ce7; }
 
-  /* Background glow that shifts with mood */
   body::before {
     content: '';
     position: fixed;
-    top: -30%;
+    top: -20%;
     left: 50%;
     transform: translateX(-50%);
-    width: 600px;
-    height: 600px;
+    width: 800px;
+    height: 800px;
     border-radius: 50%;
     background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-    opacity: 0.06;
+    opacity: 0.05;
     pointer-events: none;
     transition: all 0.8s ease;
     z-index: 0;
   }
 
-  /* ─── Header ─── */
+  /* ══════════════════════════════
+     HEADER — logo left, tabs CENTER
+  ══════════════════════════════ */
   header {
     position: relative;
     z-index: 10;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    padding: 1.5rem 2rem;
+    padding: 1.25rem 2.5rem;
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(10px);
   }
 
   .logo {
     font-family: 'Syne', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    justify-self: start;
   }
 
-  .logo span { font-weight: 400; opacity: 0.6; -webkit-text-fill-color: rgba(240,238,255,0.4); }
+  .logo span {
+    font-weight: 400;
+    -webkit-text-fill-color: rgba(240,238,255,0.35);
+  }
 
-  /* ─── Tab Navigation ─── */
+  /* Tabs — center column */
   .tabs {
     display: flex;
-    gap: 4px;
+    gap: 6px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 50px;
-    padding: 4px;
+    padding: 5px;
+    justify-self: center;
   }
 
   .tab {
-    padding: 0.5rem 1.2rem;
+    padding: 0.65rem 1.6rem;
     border-radius: 50px;
     border: none;
     background: transparent;
     color: var(--text-muted);
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    letter-spacing: 0.01em;
   }
 
   .tab.active {
@@ -110,60 +112,67 @@
     color: white;
   }
 
-  /* ─── Main Layout ─── */
+  /* ══════════════════════════════
+     MAIN CONTAINER — full width
+  ══════════════════════════════ */
   .container {
     position: relative;
     z-index: 1;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: 100%;
+    margin: 0;
+    padding: 1.75rem 2.5rem;
   }
 
   .page { display: none; }
   .page.active { display: block; }
 
-  /* ─── Mood Page Layout ─── */
-  .mood-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  @media (max-width: 768px) {
-    .mood-grid { grid-template-columns: 1fr; }
-  }
-
-  /* ─── Card Component ─── */
+  /* ══════════════════════════════
+     CARD
+  ══════════════════════════════ */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.5rem;
+    padding: 1.75rem;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, transform 0.25s, box-shadow 0.25s;
   }
 
-  .card:hover { border-color: rgba(255,255,255,0.15); }
+  .card:hover {
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+  }
 
   .card-title {
     font-family: 'Syne', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--text-muted);
     margin-bottom: 1rem;
   }
 
-  /* ─── Camera Section ─── */
+  /* ══════════════════════════════
+     TOP ROW: Camera (left) + AI Response (right)
+  ══════════════════════════════ */
+  .top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+    margin-bottom: 1.75rem;
+    align-items: start;
+  }
+
+  /* ── Camera ── */
   .camera-wrapper {
     position: relative;
     border-radius: var(--radius-sm);
     overflow: hidden;
     background: #000;
-    aspect-ratio: 4/3;
+    aspect-ratio: 21/9;
+    width: 100%;
   }
 
   #cameraFeed {
@@ -181,19 +190,16 @@
     justify-content: center;
     flex-direction: column;
     gap: 0.75rem;
-    background: rgba(10,10,15,0.8);
+    background: rgba(10,10,15,0.85);
   }
 
   .camera-overlay.hidden { display: none; }
 
-  .camera-icon {
-    font-size: 2.5rem;
-    opacity: 0.4;
-  }
+  .camera-icon { font-size: 3rem; opacity: 0.35; }
 
   .camera-overlay p {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 1rem;
   }
 
   .scan-frame {
@@ -205,42 +211,73 @@
   .scan-frame::before, .scan-frame::after {
     content: '';
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border-color: var(--accent);
     border-style: solid;
   }
 
   .scan-frame::before {
-    top: 16px; left: 16px;
+    top: 18px; left: 18px;
     border-width: 2px 0 0 2px;
-    border-radius: 4px 0 0 0;
+    border-radius: 5px 0 0 0;
   }
 
   .scan-frame::after {
-    bottom: 16px; right: 16px;
+    bottom: 18px; right: 18px;
     border-width: 0 2px 2px 0;
-    border-radius: 0 0 4px 0;
+    border-radius: 0 0 5px 0;
   }
 
-  /* ─── Emotion Display ─── */
+  /* ── AI Response card (right of camera) ── */
+  .ai-card-big {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .ai-response-big {
+    flex: 1;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    font-size: 1.5rem;
+    line-height: 1.7;
+    color: var(--text);
+    border-left: 4px solid var(--accent);
+    min-height: 40px;
+    transition: border-color 0.4s;
+  }
+
+  /* ══════════════════════════════
+     MIDDLE ROW: Mood Panel + Fix My Mood
+  ══════════════════════════════ */
+  .middle-row {
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    gap: 1.75rem;
+    margin-bottom: 1.75rem;
+    align-items: start;
+  }
+
+  /* Emotion badge */
   .emotion-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
+    gap: 0.55rem;
+    padding: 0.8rem 1.6rem;
     background: rgba(124,92,252,0.15);
     border: 1px solid rgba(124,92,252,0.3);
     border-radius: 50px;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 1rem;
     transition: all 0.5s ease;
   }
 
   .emotion-dot {
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     background: var(--accent);
     animation: pulse 2s infinite;
@@ -248,13 +285,13 @@
 
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
+    50% { opacity: 0.4; transform: scale(0.75); }
   }
 
   .confidence-bar-wrap {
     background: var(--surface2);
     border-radius: 50px;
-    height: 4px;
+    height: 5px;
     overflow: hidden;
     margin-bottom: 0.5rem;
   }
@@ -267,113 +304,46 @@
     width: 0%;
   }
 
-  /* ─── Buttons ─── */
-  .btn {
-    display: inline-flex;
+  /* Mood selector buttons */
+  .mood-selector {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .mood-btn {
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.4rem;
+    gap: 0.45rem;
+    padding: 0.65rem 1.25rem;
     border-radius: 50px;
-    border: none;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.875rem;
+    font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
-  .btn-primary {
-    background: var(--accent);
-    color: white;
-  }
+  .mood-btn:hover { transform: translateY(-2px); }
 
-  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+  .mood-btn[data-mood="happy"]:hover,
+  .mood-btn[data-mood="happy"].active { background: rgba(255,209,102,0.18); border-color: #ffd166; color: #ffd166; }
+  .mood-btn[data-mood="sad"]:hover,
+  .mood-btn[data-mood="sad"].active   { background: rgba(92,138,252,0.18); border-color: #5c8afc; color: #5c8afc; }
+  .mood-btn[data-mood="angry"]:hover,
+  .mood-btn[data-mood="angry"].active { background: rgba(252,92,92,0.18); border-color: #fc5c5c; color: #fc5c5c; }
+  .mood-btn[data-mood="tired"]:hover,
+  .mood-btn[data-mood="tired"].active { background: rgba(155,142,196,0.18); border-color: #9b8ec4; color: #9b8ec4; }
+  .mood-btn[data-mood="neutral"]:hover,
+  .mood-btn[data-mood="neutral"].active { background: rgba(136,132,160,0.18); border-color: #8884a0; color: #8884a0; }
 
-  .btn-ghost {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  .btn-ghost.active {
-    border-color: var(--accent2);
-    color: var(--accent2);
-    background: rgba(252,92,138,0.1);
-  }
-
-  .btn-group {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-  }
-
-  /* ─── Suggestion Grid ─── */
-  .suggestion-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  .suggestion-item {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .suggestion-item:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-
-  .suggestion-item .type-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.35rem;
-  }
-
-  .suggestion-item p {
-    font-size: 0.875rem;
-    line-height: 1.5;
-    color: var(--text);
-  }
-
-  /* ─── AI Response ─── */
-  .ai-response {
-    background: var(--surface2);
-    border-radius: var(--radius-sm);
-    padding: 1.25rem;
-    margin-top: 1rem;
-    min-height: 80px;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: var(--text);
-    border-left: 3px solid var(--accent);
-  }
-
-  .ai-response.loading::after {
-    content: '...';
-    animation: blink 1s infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; } 50% { opacity: 0; }
-  }
-
-  /* ─── Voice Section ─── */
+  /* Voice */
   .voice-btn {
-    width: 64px;
-    height: 64px;
+    width: 62px;
+    height: 62px;
     border-radius: 50%;
     border: none;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -383,18 +353,18 @@
     justify-content: center;
     font-size: 1.5rem;
     transition: all 0.2s ease;
-    box-shadow: 0 0 0 0 rgba(124,92,252,0.4);
+    flex-shrink: 0;
   }
 
-  .voice-btn:hover { transform: scale(1.05); }
+  .voice-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(124,92,252,0.4); }
 
   .voice-btn.listening {
     animation: voicePulse 1.5s infinite;
   }
 
   @keyframes voicePulse {
-    0% { box-shadow: 0 0 0 0 rgba(124,92,252,0.4); }
-    70% { box-shadow: 0 0 0 20px rgba(124,92,252,0); }
+    0%   { box-shadow: 0 0 0 0 rgba(124,92,252,0.5); }
+    70%  { box-shadow: 0 0 0 22px rgba(124,92,252,0); }
     100% { box-shadow: 0 0 0 0 rgba(124,92,252,0); }
   }
 
@@ -402,13 +372,16 @@
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 0.875rem 1rem;
-    font-size: 0.9rem;
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
     color: var(--text-muted);
-    min-height: 50px;
+    min-height: 56px;
     font-style: italic;
     flex: 1;
+    transition: border-color 0.3s;
   }
+
+  .voice-transcript:focus-within { border-color: var(--accent); }
 
   .voice-row {
     display: flex;
@@ -416,52 +389,278 @@
     gap: 1rem;
   }
 
-  /* ─── Action Plan ─── */
+  /* Fix My Mood — wider card */
+  .fix-card {
+    min-height: 260px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    border: none;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(124,92,252,0.35); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .btn-ghost:hover  { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-group {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    margin-top: 1.1rem;
+  }
+
+  /* Action plan list */
   .action-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.65rem;
+    margin-top: 1rem;
   }
 
   .action-list li {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.75rem;
+    gap: 0.85rem;
+    padding: 1rem 1.2rem;
     background: var(--surface2);
     border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    line-height: 1.5;
+    font-size: 1rem;
+    line-height: 1.6;
     border: 1px solid var(--border);
+    transition: all 0.2s ease;
+    cursor: default;
+  }
+
+  .action-list li:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+    background: rgba(124,92,252,0.07);
   }
 
   .action-number {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     background: var(--accent);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
     flex-shrink: 0;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
-  /* ─── Food Genie ─── */
+  /* Status row */
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #555;
+  }
+
+  .status-dot.online   { background: #2ecc71; }
+  .status-dot.thinking { background: var(--accent); animation: pulse 1s infinite; }
+  .status-text { font-size: 0.85rem; color: var(--text-muted); }
+
+  /* Hint text */
+  .hint {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--text-muted);
+  }
+
+  .empty-state .icon { font-size: 2.2rem; margin-bottom: 0.6rem; opacity: 0.35; }
+  .empty-state p { font-size: 0.95rem; }
+
+  /* Spinner */
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.25);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ══════════════════════════════
+     SONGS SECTION — full width below
+  ══════════════════════════════ */
+  .songs-row {
+    margin-bottom: 1.75rem;
+  }
+
+  .songs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .song-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.22s ease;
+  }
+
+  .song-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+    background: rgba(124,92,252,0.08);
+  }
+
+  .song-cover {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .song-info { min-width: 0; }
+
+  .song-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .song-artist {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+  }
+
+  .song-play {
+    margin-left: auto;
+    font-size: 1.1rem;
+    opacity: 0.35;
+    flex-shrink: 0;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .song-card:hover .song-play { opacity: 1; transform: scale(1.25); }
+
+  /* ══════════════════════════════
+     BOTTOM ROW: Mood Suggestions
+  ══════════════════════════════ */
+  .bottom-row {
+    margin-bottom: 1.75rem;
+  }
+
+  .suggestion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .suggestion-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.2rem 1.3rem;
+    cursor: pointer;
+    transition: all 0.22s ease;
+  }
+
+  .suggestion-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+    background: rgba(124,92,252,0.07);
+  }
+
+  .suggestion-item .type-label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.45rem;
+  }
+
+  .suggestion-item p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* ══════════════════════════════
+     FOOD GENIE PAGE
+  ══════════════════════════════ */
   .food-hero {
     text-align: center;
-    padding: 2rem 0 1rem;
+    padding: 1.75rem 0 1.25rem;
     margin-bottom: 1.5rem;
   }
 
   .food-hero h2 {
     font-family: 'Syne', sans-serif;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 800;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     background: linear-gradient(135deg, #ffd166, #ff6b6b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -470,13 +669,13 @@
 
   .food-hero p {
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .food-input-row {
     display: flex;
     gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
   }
 
   .food-input {
@@ -484,10 +683,10 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 50px;
-    padding: 0.875rem 1.5rem;
+    padding: 0.9rem 1.5rem;
     color: var(--text);
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.95rem;
+    font-size: 1rem;
     outline: none;
     transition: border-color 0.3s;
   }
@@ -503,22 +702,22 @@
   }
 
   .chip {
-    padding: 0.4rem 1rem;
+    padding: 0.5rem 1.2rem;
     border-radius: 50px;
     border: 1px solid var(--border);
     background: transparent;
     color: var(--text-muted);
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
-  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
   .food-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: 1rem;
   }
 
@@ -526,141 +725,72 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 1.25rem;
+    padding: 1.5rem;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
   }
 
-  .food-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .food-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.35);
+  }
 
   .food-emoji {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
   }
 
   .food-card h3 {
     font-family: 'Syne', sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.35rem;
   }
 
   .food-card p {
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
-  /* ─── Loading Spinner ─── */
-  .spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255,255,255,0.2);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  .ai-response-food {
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 1.35rem 1.6rem;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text);
+    border-left: 4px solid var(--accent);
+    margin-top: 0;
   }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ─── Status ─── */
-  .status-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #666;
-  }
-
-  .status-dot.online { background: #2ecc71; }
-  .status-dot.thinking { background: var(--accent); animation: pulse 1s infinite; }
-
-  .status-text { font-size: 0.8rem; color: var(--text-muted); }
-
-  /* ─── Empty State ─── */
-  .empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-muted);
-  }
-
-  .empty-state .icon { font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.4; }
-  .empty-state p { font-size: 0.9rem; }
-
-  /* ─── Full-width Row ─── */
-  .full-row {
-    grid-column: 1 / -1;
-  }
-
-  /* Instruction message */
-  .hint {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    margin-top: 0.5rem;
-    line-height: 1.5;
-  }
-
-  /* ─── Mood Selector (manual fallback) ─── */
-  .mood-selector {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .mood-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 0.9rem;
-    border-radius: 50px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-muted);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .mood-btn:hover, .mood-btn.active { color: white; }
-  .mood-btn[data-mood="happy"]:hover,
-  .mood-btn[data-mood="happy"].active { background: rgba(255,209,102,0.2); border-color: #ffd166; color: #ffd166; }
-  .mood-btn[data-mood="sad"]:hover,
-  .mood-btn[data-mood="sad"].active { background: rgba(92,138,252,0.2); border-color: #5c8afc; color: #5c8afc; }
-  .mood-btn[data-mood="angry"]:hover,
-  .mood-btn[data-mood="angry"].active { background: rgba(252,92,92,0.2); border-color: #fc5c5c; color: #fc5c5c; }
-  .mood-btn[data-mood="tired"]:hover,
-  .mood-btn[data-mood="tired"].active { background: rgba(155,142,196,0.2); border-color: #9b8ec4; color: #9b8ec4; }
-  .mood-btn[data-mood="neutral"]:hover,
-  .mood-btn[data-mood="neutral"].active { background: rgba(136,132,160,0.2); border-color: #8884a0; color: #8884a0; }
-
 </style>
 </head>
 <body>
 
+<!-- ══════════════════════ HEADER ══════════════════════ -->
 <header>
   <div class="logo">MoodMirror <span>AI</span></div>
+
+  <!-- TABS — centered via grid -->
   <nav class="tabs">
-    <button class="tab active" onclick="switchPage('mood')">🧠 Mood Mode</button>
-    <button class="tab" onclick="switchPage('food')">🍔 Food Genie</button>
+    <button class="tab active" onclick="switchPage('mood', this)">🧠 Mood Mode</button>
+    <button class="tab" onclick="switchPage('food', this)">🍔 Food Genie</button>
   </nav>
+
+  <div></div><!-- spacer to balance grid -->
 </header>
 
-<!-- ═══════════════════════════════════ MOOD PAGE ═══════════════════════════════════ -->
 <div class="container">
+
+<!-- ══════════════════════════════════════════════
+     MOOD PAGE
+══════════════════════════════════════════════ -->
 <div id="page-mood" class="page active">
 
-  <div class="mood-grid">
+  <!-- TOP ROW: Camera LEFT | AI Response RIGHT -->
+  <div class="top-row">
 
     <!-- Camera Card -->
     <div class="card">
@@ -680,7 +810,25 @@
       <p class="hint">Camera is processed locally. Emotion detection uses Gemini AI.</p>
     </div>
 
-    <!-- Emotion + Voice Card -->
+    <!-- Gemini AI Response — RIGHT, BIGGER -->
+    <div class="card ai-card-big">
+      <div class="card-title">🤖 Gemini AI Response</div>
+      <div class="ai-response-big" id="aiResponse">
+        Waiting for your mood input... Try detecting your emotion or speak your feelings!
+      </div>
+      <div class="status-row">
+        <div class="status-dot" id="statusDot"></div>
+        <span class="status-text" id="statusText">Idle</span>
+      </div>
+    </div>
+
+  </div><!-- /top-row -->
+
+
+  <!-- MIDDLE ROW: Mood Panel LEFT | Fix My Mood RIGHT (wider) -->
+  <div class="middle-row">
+
+    <!-- Your Mood + Voice -->
     <div class="card">
       <div class="card-title">🎭 Your Mood</div>
 
@@ -692,53 +840,33 @@
       <div class="confidence-bar-wrap">
         <div class="confidence-bar" id="confidenceBar"></div>
       </div>
-      <p class="hint" id="confidenceLabel">Confidence: —</p>
+      <p class="hint" id="confidenceLabel" style="margin-bottom:1.25rem;">Confidence: —</p>
 
       <!-- Manual mood selector -->
-      <div style="margin-top: 1.25rem;">
-        <div class="card-title">Or select manually</div>
-        <div class="mood-selector">
-          <button class="mood-btn" data-mood="happy" onclick="setMood('happy', 95)">😄 Happy</button>
-          <button class="mood-btn" data-mood="sad" onclick="setMood('sad', 90)">😢 Sad</button>
-          <button class="mood-btn" data-mood="angry" onclick="setMood('angry', 88)">😠 Angry</button>
-          <button class="mood-btn" data-mood="tired" onclick="setMood('tired', 82)">😴 Tired</button>
-          <button class="mood-btn" data-mood="neutral" onclick="setMood('neutral', 78)">😐 Neutral</button>
-        </div>
+      <div class="card-title">Or select manually</div>
+      <div class="mood-selector" style="margin-bottom:1.5rem;">
+        <button class="mood-btn" data-mood="happy"   onclick="setMood('happy', 95)">😄 Happy</button>
+        <button class="mood-btn" data-mood="sad"     onclick="setMood('sad', 90)">😢 Sad</button>
+        <button class="mood-btn" data-mood="angry"   onclick="setMood('angry', 88)">😠 Angry</button>
+        <button class="mood-btn" data-mood="tired"   onclick="setMood('tired', 82)">😴 Tired</button>
+        <button class="mood-btn" data-mood="neutral" onclick="setMood('neutral', 78)">😐 Neutral</button>
       </div>
 
       <!-- Voice -->
-      <div style="margin-top: 1.5rem;">
-        <div class="card-title">🎤 Voice Input</div>
-        <div class="voice-row">
-          <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Hold to speak">🎤</button>
-          <div class="voice-transcript" id="voiceTranscript">Tap mic and describe how you feel...</div>
-        </div>
-      </div>
-
-      <div class="status-row">
-        <div class="status-dot" id="statusDot"></div>
-        <span class="status-text" id="statusText">Idle</span>
+      <div class="card-title">🎤 Voice Input</div>
+      <div class="voice-row">
+        <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Tap to speak">🎤</button>
+        <div class="voice-transcript" id="voiceTranscript">Tap mic and describe how you feel...</div>
       </div>
     </div>
 
-    <!-- Suggestions Card -->
-    <div class="card">
-      <div class="card-title">✨ Mood Suggestions</div>
-      <div id="suggestionsContent">
-        <div class="empty-state">
-          <div class="icon">🎵</div>
-          <p>Detect your mood to get personalized suggestions</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI Response / Fix My Mood Card -->
-    <div class="card">
+    <!-- Fix My Mood — ACTION PLAN (wider, right column) -->
+    <div class="card fix-card">
       <div class="card-title">🛠 Fix My Mood — Action Plan</div>
-      <button class="btn btn-primary" id="fixBtn" onclick="generateActionPlan()" disabled>
+      <button class="btn btn-primary" id="fixBtn" onclick="generateActionPlan()" disabled style="font-size:1.1rem; padding:0.9rem 2.2rem;">
         ⚡ Generate Action Plan
       </button>
-      <div id="actionPlanContent" style="margin-top: 1rem;">
+      <div id="actionPlanContent">
         <div class="empty-state">
           <div class="icon">🧩</div>
           <p>Your personalized action plan will appear here</p>
@@ -746,18 +874,38 @@
       </div>
     </div>
 
-    <!-- AI Full Response (full row) -->
-    <div class="card full-row">
-      <div class="card-title">🤖 Gemini AI Response</div>
-      <div class="ai-response" id="aiResponse">
-        Waiting for your mood input... Try detecting your emotion or speak your feelings!
+  </div><!-- /middle-row -->
+
+
+  <!-- SONGS ROW — full width -->
+  <div class="songs-row card">
+    <div class="card-title">🎵 Songs for Your Mood</div>
+    <div class="songs-grid" id="songsGrid">
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="icon">🎧</div>
+        <p>Detect your mood to get song recommendations</p>
       </div>
     </div>
-
   </div>
-</div>
 
-<!-- ═══════════════════════════════════ FOOD PAGE ═══════════════════════════════════ -->
+
+  <!-- SUGGESTIONS ROW — full width -->
+  <div class="bottom-row card">
+    <div class="card-title">✨ Mood Suggestions</div>
+    <div id="suggestionsContent">
+      <div class="empty-state">
+        <div class="icon">🎭</div>
+        <p>Detect your mood to get personalized suggestions</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-mood -->
+
+
+<!-- ══════════════════════════════════════════════
+     FOOD GENIE PAGE
+══════════════════════════════════════════════ -->
 <div id="page-food" class="page">
   <div class="food-hero">
     <h2>🍔 Food Genie</h2>
@@ -772,21 +920,19 @@
       placeholder="e.g. I want something spicy and filling..."
       onkeydown="if(event.key==='Enter') getFoodSuggestion()"
     />
-    <button class="btn btn-primary" onclick="getFoodSuggestion()" id="foodBtn">
-      🍽 Suggest
-    </button>
-    <button class="voice-btn" style="width:48px;height:48px;font-size:1.2rem;" onclick="toggleFoodVoice()" id="foodVoiceBtn">🎤</button>
+    <button class="btn btn-primary" onclick="getFoodSuggestion()" id="foodBtn">🍽 Suggest</button>
+    <button class="voice-btn" style="width:52px;height:52px;font-size:1.2rem;" onclick="toggleFoodVoice()" id="foodVoiceBtn">🎤</button>
   </div>
 
   <div class="quick-chips">
-    <button class="chip" onclick="setFoodChip(this, 'I want something spicy')">🌶 Spicy</button>
-    <button class="chip" onclick="setFoodChip(this, 'I want something sweet')">🍰 Sweet</button>
-    <button class="chip" onclick="setFoodChip(this, 'Give me healthy food options')">🥗 Healthy</button>
-    <button class="chip" onclick="setFoodChip(this, 'I want fast food')">🍟 Fast Food</button>
-    <button class="chip" onclick="setFoodChip(this, 'Something cold and refreshing')">🧊 Cold</button>
-    <button class="chip" onclick="setFoodChip(this, 'Comfort food that feels like home')">🏠 Comfort</button>
-    <button class="chip" onclick="setFoodChip(this, 'I want street food')">🛺 Street Food</button>
-    <button class="chip" onclick="setFoodChip(this, 'Something light for dinner')">🌙 Light</button>
+    <button class="chip" onclick="setFoodChip(this,'I want something spicy')">🌶 Spicy</button>
+    <button class="chip" onclick="setFoodChip(this,'I want something sweet')">🍰 Sweet</button>
+    <button class="chip" onclick="setFoodChip(this,'Give me healthy food options')">🥗 Healthy</button>
+    <button class="chip" onclick="setFoodChip(this,'I want fast food')">🍟 Fast Food</button>
+    <button class="chip" onclick="setFoodChip(this,'Something cold and refreshing')">🧊 Cold</button>
+    <button class="chip" onclick="setFoodChip(this,'Comfort food that feels like home')">🏠 Comfort</button>
+    <button class="chip" onclick="setFoodChip(this,'I want street food')">🛺 Street Food</button>
+    <button class="chip" onclick="setFoodChip(this,'Something light for dinner')">🌙 Light</button>
   </div>
 
   <div id="foodStatus" class="status-row" style="display:none; margin-bottom:1rem;">
@@ -794,41 +940,83 @@
     <span class="status-text">Food Genie is thinking...</span>
   </div>
 
-  <div id="foodCards" class="food-cards">
-    <div class="empty-state" style="grid-column: 1/-1;">
+  <div id="foodCards" class="food-cards" style="margin-bottom:1.5rem;">
+    <div class="empty-state" style="grid-column:1/-1;">
       <div class="icon">🍽</div>
       <p>Ask Food Genie what you're craving!</p>
     </div>
   </div>
 
-  <!-- Full AI response for food -->
-  <div class="card" style="margin-top:1.5rem; display:none;" id="foodResponseCard">
+  <div class="card" style="display:none;" id="foodResponseCard">
     <div class="card-title">🤖 Food Genie Says</div>
-    <div class="ai-response" id="foodAiResponse"></div>
+    <div class="ai-response-food" id="foodAiResponse"></div>
   </div>
+</div>
 
-</div>
-</div>
+</div><!-- /container -->
 
 <script>
 // ════════════════════════════════════════
 //   MOODMIRROR AI — FRONTEND LOGIC
-//   Connects to Python backend via fetch()
 // ════════════════════════════════════════
 
-const API_BASE = 'http://localhost:5000';  // Change this if your server runs elsewhere
+const API_BASE = 'http://localhost:5000';
 
 let currentMood = null;
 let cameraActive = false;
 let recognition = null;
 let isListening = false;
 
+// ── Songs data per mood ──
+const MOOD_SONGS = {
+  happy: [
+    { title: 'Happy', artist: 'Pharrell Williams', emoji: '☀️' },
+    { title: 'Can\'t Stop the Feeling', artist: 'Justin Timberlake', emoji: '🕺' },
+    { title: 'Blinding Lights', artist: 'The Weeknd', emoji: '🌟' },
+    { title: 'Uptown Funk', artist: 'Mark Ronson ft. Bruno Mars', emoji: '🎷' },
+    { title: 'Good as Hell', artist: 'Lizzo', emoji: '💛' },
+    { title: 'Walking on Sunshine', artist: 'Katrina & the Waves', emoji: '🌈' },
+  ],
+  sad: [
+    { title: 'Fix You', artist: 'Coldplay', emoji: '💙' },
+    { title: 'The Night We Met', artist: 'Lord Huron', emoji: '🌙' },
+    { title: 'Someone Like You', artist: 'Adele', emoji: '🥺' },
+    { title: 'Chasing Cars', artist: 'Snow Patrol', emoji: '🌧️' },
+    { title: 'Let Her Go', artist: 'Passenger', emoji: '🍂' },
+    { title: 'Skinny Love', artist: 'Bon Iver', emoji: '🕯️' },
+  ],
+  angry: [
+    { title: 'Don\'t Stop Me Now', artist: 'Queen', emoji: '🔥' },
+    { title: 'Break Stuff', artist: 'Limp Bizkit', emoji: '💥' },
+    { title: 'In The End', artist: 'Linkin Park', emoji: '⚡' },
+    { title: 'Stronger', artist: 'Kanye West', emoji: '💪' },
+    { title: 'Killing in the Name', artist: 'Rage Against the Machine', emoji: '🎸' },
+    { title: 'Till I Collapse', artist: 'Eminem', emoji: '🥊' },
+  ],
+  tired: [
+    { title: 'Weightless', artist: 'Marconi Union', emoji: '😌' },
+    { title: 'Holocene', artist: 'Bon Iver', emoji: '❄️' },
+    { title: 'Breathe (2 AM)', artist: 'Anna Nalick', emoji: '🌫️' },
+    { title: 'Sleep', artist: 'Eric Whitacre', emoji: '🌸' },
+    { title: 'Clair de Lune', artist: 'Debussy', emoji: '🌙' },
+    { title: 'A Thousand Years', artist: 'Christina Perri', emoji: '🕊️' },
+  ],
+  neutral: [
+    { title: 'Viva La Vida', artist: 'Coldplay', emoji: '🎨' },
+    { title: 'Yellow', artist: 'Coldplay', emoji: '💛' },
+    { title: 'Dog Days Are Over', artist: 'Florence + Machine', emoji: '🌿' },
+    { title: 'Budapest', artist: 'George Ezra', emoji: '🏛️' },
+    { title: 'Ho Hey', artist: 'The Lumineers', emoji: '🪕' },
+    { title: 'Riptide', artist: 'Vance Joy', emoji: '🌊' },
+  ]
+};
+
 // ─── Page Switching ───
-function switchPage(page) {
+function switchPage(page, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById(`page-${page}`).classList.add('active');
-  event.target.classList.add('active');
+  el.classList.add('active');
 }
 
 // ─── Camera ───
@@ -862,7 +1050,6 @@ async function toggleCamera() {
   }
 }
 
-// ─── Capture frame and send to backend ───
 async function captureEmotion() {
   const video = document.getElementById('cameraFeed');
   const canvas = document.createElement('canvas');
@@ -894,40 +1081,50 @@ async function captureEmotion() {
 // ─── Set Mood ───
 function setMood(mood, confidence) {
   currentMood = mood;
-
-  // Update body class for theme
   document.body.className = `mood-${mood}`;
 
-  // Update badge
-  const colors = {
-    happy: '#ffd166', sad: '#5c8afc', angry: '#fc5c5c',
-    tired: '#9b8ec4', neutral: '#8884a0'
-  };
+  const colors = { happy: '#ffd166', sad: '#5c8afc', angry: '#fc5c5c', tired: '#9b8ec4', neutral: '#8884a0' };
   const emojis = { happy: '😄', sad: '😢', angry: '😠', tired: '😴', neutral: '😐' };
 
   document.getElementById('emotionText').textContent = `${emojis[mood]} ${capitalize(mood)}`;
   document.getElementById('emotionBadge').style.borderColor = colors[mood] + '60';
-  document.getElementById('emotionBadge').style.background = colors[mood] + '20';
+  document.getElementById('emotionBadge').style.background  = colors[mood] + '20';
   document.getElementById('confidenceBar').style.width = confidence + '%';
   document.getElementById('confidenceLabel').textContent = `Confidence: ${confidence}%`;
 
-  // Update mood buttons
-  document.querySelectorAll('.mood-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.mood === mood);
-  });
-
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.toggle('active', b.dataset.mood === mood));
   document.getElementById('fixBtn').disabled = false;
-  setStatus('online', `Mood detected: ${capitalize(mood)}`);
 
-  // Load suggestions
+  setStatus('online', `Mood detected: ${capitalize(mood)}`);
   loadSuggestions(mood);
+  loadSongs(mood);
   fetchAIResponse(mood);
 }
 
-// ─── Load Suggestions from backend ───
+// ─── Songs ───
+function loadSongs(mood) {
+  const songs = MOOD_SONGS[mood] || MOOD_SONGS.neutral;
+  const html = songs.map(s => {
+    const query = encodeURIComponent(s.title + ' ' + s.artist);
+    const youtubeUrl = 'https://www.youtube.com/results?search_query=' + query;
+    return `
+    <div class="song-card" onclick="window.open('${youtubeUrl}', '_blank')" title="Open on YouTube">
+      <div class="song-cover">${s.emoji}</div>
+      <div class="song-info">
+        <div class="song-title">${s.title}</div>
+        <div class="song-artist">${s.artist}</div>
+      </div>
+      <div class="song-play">▶</div>
+    </div>
+  `;
+  }).join('');
+  document.getElementById('songsGrid').innerHTML = html;
+}
+
+// ─── Suggestions ───
 async function loadSuggestions(mood) {
   const container = document.getElementById('suggestionsContent');
-  container.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;padding:1rem 0;">Loading suggestions...</div>';
+  container.innerHTML = '<div style="color:var(--text-muted);font-size:0.9rem;padding:1rem 0;">Loading suggestions...</div>';
 
   try {
     const res = await fetch(`${API_BASE}/suggestions`, {
@@ -938,9 +1135,7 @@ async function loadSuggestions(mood) {
     const data = await res.json();
     renderSuggestions(data.suggestions);
   } catch(e) {
-    // Use fallback offline suggestions
-    const fallback = getFallbackSuggestions(mood);
-    renderSuggestions(fallback);
+    renderSuggestions(getFallbackSuggestions(mood));
   }
 }
 
@@ -952,47 +1147,46 @@ function renderSuggestions(suggestions) {
       <p>${s.content}</p>
     </div>
   `).join('');
-  document.getElementById('suggestionsContent').innerHTML =
-    `<div class="suggestion-grid">${html}</div>`;
+  document.getElementById('suggestionsContent').innerHTML = `<div class="suggestion-grid">${html}</div>`;
 }
 
 function getFallbackSuggestions(mood) {
   const data = {
     happy: [
-      { type: '🎵 Song', content: 'Happy – Pharrell Williams' },
       { type: '💬 Quote', content: '"Happiness is not something ready-made." — Dalai Lama' },
       { type: '🎭 Meme', content: 'Share your good energy! High-five someone today 🙌' },
-      { type: '🎮 Activity', content: 'Go for a walk and enjoy the moment!' }
+      { type: '🎮 Activity', content: 'Go for a walk and enjoy the moment! You deserve it.' },
+      { type: '📞 Connect', content: 'Call someone you love — spread the happiness!' }
     ],
     sad: [
-      { type: '🎵 Song', content: 'Fix You – Coldplay' },
       { type: '💬 Quote', content: '"Even the darkest night will end and the sun will rise." — Victor Hugo' },
       { type: '🤗 Comfort', content: 'It\'s okay to feel sad. Write in a journal today.' },
-      { type: '☕ Activity', content: 'Make yourself a warm drink and rest.' }
+      { type: '☕ Activity', content: 'Make yourself a warm drink and rest.' },
+      { type: '🌿 Nature', content: 'Step outside for 10 minutes of fresh air — it helps.' }
     ],
     angry: [
-      { type: '🎵 Song', content: 'Don\'t Stop Me Now – Queen' },
       { type: '💬 Quote', content: '"For every minute you remain angry, you give up sixty seconds of peace." — Emerson' },
-      { type: '🥊 Activity', content: 'Try 10 minutes of exercise to release energy.' },
-      { type: '😮‍💨 Breathe', content: 'Take 5 deep breaths: in for 4, hold for 4, out for 6.' }
+      { type: '🥊 Activity', content: 'Try 10 minutes of exercise to release pent-up energy.' },
+      { type: '😮‍💨 Breathe', content: 'Box breathing: in 4, hold 4, out 6. Repeat 5 times.' },
+      { type: '✍️ Write', content: 'Write down what\'s bothering you — don\'t hold it in.' }
     ],
     tired: [
-      { type: '🎵 Song', content: 'Weightless – Marconi Union (most relaxing song)' },
       { type: '💬 Quote', content: '"Rest when you\'re weary. Refresh and renew yourself." — Ralph M. Ford' },
-      { type: '😴 Rest', content: 'A 20-minute nap can recharge you completely.' },
-      { type: '💧 Tip', content: 'Drink water! Dehydration causes fatigue.' }
+      { type: '😴 Rest', content: 'A 20-minute nap can completely recharge you.' },
+      { type: '💧 Tip', content: 'Drink water right now! Dehydration is a sneaky cause of fatigue.' },
+      { type: '📵 Screen', content: 'Step away from screens for 15 minutes. Your eyes need rest.' }
     ],
     neutral: [
-      { type: '🎵 Song', content: 'Viva La Vida – Coldplay' },
       { type: '💬 Quote', content: '"Life is what happens when you\'re busy making other plans." — John Lennon' },
       { type: '🎯 Activity', content: 'Set one small goal for today and crush it.' },
-      { type: '📚 Learn', content: 'Learn something new for 10 minutes today.' }
+      { type: '📚 Learn', content: 'Learn something new for 10 minutes today.' },
+      { type: '🌟 Reflect', content: 'Write down 3 things you\'re grateful for right now.' }
     ]
   };
   return data[mood] || data.neutral;
 }
 
-// ─── Fetch AI Response for mood ───
+// ─── AI Response ───
 async function fetchAIResponse(mood) {
   setStatus('thinking', 'Gemini is thinking...');
   try {
@@ -1007,14 +1201,14 @@ async function fetchAIResponse(mood) {
     setStatus('online', 'Response received');
   } catch(e) {
     const fallback = {
-      happy: "You're glowing today! 😄 Your positive energy is contagious. Keep riding this wave — reach out to someone you care about or tackle that project you've been putting off. Happy people make things happen!",
-      sad: "Hey, I see you're going through a tough time. 💙 That's completely okay. Be gentle with yourself. Maybe step outside for some fresh air, listen to your favorite song, or reach out to a friend. You don't have to face this alone.",
-      angry: "Take a breath. 🔥 Your feelings are valid. Try channeling this energy into something productive — exercise, cleaning, or creating something. The fire inside you is powerful when directed well.",
-      tired: "Your body is sending you a message — rest is important! 😴 Try to step away from screens, drink some water, and even a short 20-minute rest can work wonders. You can't pour from an empty cup.",
-      neutral: "A neutral day is a blank canvas — anything is possible! 🎨 Maybe today's the day to try something new, have a meaningful conversation, or simply enjoy being present in the moment."
+      happy: "You're absolutely glowing today! 😄 Your positive energy is contagious — use this momentum to connect with someone you love or tackle that project you've been putting off. Happy people make the best things happen!",
+      sad: "Hey, I see you're going through a tough moment. 💙 That's completely valid. Be gentle with yourself — step outside for some fresh air, listen to a song that comforts you, or just let yourself feel it. You're stronger than you think.",
+      angry: "Take a breath right now. 🔥 Your feelings are valid and powerful. Try channeling this energy into something productive — exercise, creating, or even just writing it all out. The fire inside you can move mountains when directed well.",
+      tired: "Your body is sending you a clear message — rest is important! 😴 Step away from screens, drink some water, and even a short 20-minute nap can work wonders. You can't pour from an empty cup, so refill yours.",
+      neutral: "A neutral day is actually a blank canvas — anything is possible! 🎨 Maybe today's the day to try something new, have a meaningful conversation, or simply enjoy being present without any pressure."
     };
     setAIResponse(fallback[mood] || fallback.neutral);
-    setStatus('', 'Offline mode (backend not connected)');
+    setStatus('', 'Offline mode — backend not connected');
   }
 }
 
@@ -1035,8 +1229,7 @@ async function generateActionPlan() {
     const data = await res.json();
     renderActionPlan(data.steps);
   } catch(e) {
-    const fallback = getFallbackActionPlan(currentMood);
-    renderActionPlan(fallback);
+    renderActionPlan(getFallbackActionPlan(currentMood));
   }
 
   btn.innerHTML = '⚡ Regenerate Plan';
@@ -1059,29 +1252,30 @@ function getFallbackActionPlan(mood) {
     happy: [
       'Channel this energy — start that creative project you\'ve been postponing.',
       'Call or text someone you love and share your good mood.',
-      'Write down 3 things you\'re grateful for to remember this feeling.',
-      'Use this momentum to tackle your most difficult task today.'
+      'Write down 3 things you\'re grateful for to anchor this feeling.',
+      'Use this momentum to tackle your most difficult task today.',
+      'Do something kind for a stranger — it multiplies the joy.'
     ],
     sad: [
-      'Acknowledge your feelings — it\'s okay to feel sad. Don\'t suppress it.',
+      'Acknowledge your feelings without judgment — it\'s okay to feel sad.',
       'Step outside for 10 minutes of fresh air and sunlight.',
-      'Listen to a comforting playlist or podcast that uplifts you.',
+      'Listen to a comforting playlist or podcast.',
       'Reach out to one friend or family member just to say hello.',
       'Do one small act of self-care: shower, eat something warm, rest.'
     ],
     angry: [
       'Do 10 jumping jacks or push-ups right now to release physical tension.',
       'Write down exactly what\'s bothering you — don\'t censor yourself.',
-      'Try box breathing: 4 counts in, hold 4, out 4, hold 4. Repeat 5x.',
+      'Try box breathing: 4 counts in, hold 4, out 4. Repeat 5x.',
       'After cooling down, revisit the issue with a clear head.',
-      'Forgive — not for them, but for your own peace.'
+      'Forgive — not for them, but for your own peace of mind.'
     ],
     tired: [
       'Set a 20-minute timer and close your eyes — power nap time!',
       'Drink a full glass of water right now. Dehydration causes fatigue.',
-      'Step away from screens for 15 minutes.',
-      'Do gentle stretches or a short walk to wake your body up.',
-      'Tonight: set a consistent bedtime and stick to it.'
+      'Step away from screens for at least 15 minutes.',
+      'Do gentle stretches or a slow walk to wake your body up.',
+      'Tonight: set a consistent bedtime and stick to it all week.'
     ],
     neutral: [
       'Set one small, clear goal for today and write it down.',
@@ -1094,7 +1288,7 @@ function getFallbackActionPlan(mood) {
   return plans[mood] || plans.neutral;
 }
 
-// ─── Voice Recognition ───
+// ─── Voice ───
 function setupRecognition(onResult) {
   if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
     alert('Voice recognition not supported in your browser. Try Chrome!');
@@ -1129,12 +1323,10 @@ function toggleVoice() {
     btn.classList.add('listening');
     transcript.textContent = '🎙 Listening...';
     isListening = true;
-    btn.title = 'Tap to stop';
   } else {
     if (recognition) recognition.stop();
     btn.classList.remove('listening');
     isListening = false;
-    btn.title = 'Tap to speak';
   }
 }
 
@@ -1153,15 +1345,13 @@ async function analyzeVoiceMood(text) {
     setAIResponse(data.response);
     speakText(data.response);
   } catch(e) {
-    // Simple offline keyword detection
     const lower = text.toLowerCase();
-    if (lower.match(/happy|great|amazing|good|wonderful|excited|joy/)) setMood('happy', 75);
-    else if (lower.match(/sad|depressed|lonely|cry|miss|lost|hopeless/)) setMood('sad', 75);
-    else if (lower.match(/angry|frustrated|annoyed|hate|mad|furious/)) setMood('angry', 75);
-    else if (lower.match(/tired|exhausted|sleepy|fatigue|drained|bored/)) setMood('tired', 75);
+    if (lower.match(/happy|great|amazing|good|wonderful|excited|joy/))          setMood('happy', 75);
+    else if (lower.match(/sad|depressed|lonely|cry|miss|lost|hopeless/))        setMood('sad', 75);
+    else if (lower.match(/angry|frustrated|annoyed|hate|mad|furious/))          setMood('angry', 75);
+    else if (lower.match(/tired|exhausted|sleepy|fatigue|drained|bored/))       setMood('tired', 75);
     else setMood('neutral', 70);
-
-    setStatus('', 'Offline detection used (backend not running)');
+    setStatus('', 'Offline detection used');
   }
 }
 
@@ -1173,6 +1363,7 @@ function setFoodChip(el, text) {
   document.getElementById('foodInput').value = text;
   document.querySelectorAll('.chip').forEach(c => c.style.borderColor = '');
   el.style.borderColor = 'var(--accent)';
+  el.style.color = 'var(--accent)';
 }
 
 async function getFoodSuggestion() {
@@ -1252,7 +1443,7 @@ function getFallbackFood(query) {
         { emoji: '🥙', name: 'Oats Upma', description: 'Fiber-rich savory oats bowl' },
         { emoji: '🫐', name: 'Fruit Bowl', description: 'Fresh seasonal fruits with honey' }
       ],
-      description: "Smart choice! These options are nutritious and delicious. Sprout salad is a protein powerhouse and Idli is one of the healthiest breakfast options out there! 💪"
+      description: "Smart choice! Sprout salad is a protein powerhouse and Idli is one of the healthiest breakfast options out there! 💪"
     },
     fast: {
       foods: [
@@ -1261,7 +1452,7 @@ function getFallbackFood(query) {
         { emoji: '🍟', name: 'Loaded Fries', description: 'Crispy fries with toppings' },
         { emoji: '🌯', name: 'Wrap', description: 'Quick and filling tortilla wrap' }
       ],
-      description: "Fast food mood activated! Pizza and burgers are classics for a reason. Pro tip: pair with a cold drink for the full experience. 🎉"
+      description: "Fast food mood activated! Pizza and burgers are classics for a reason. Pair with a cold drink for the full experience. 🎉"
     },
     cold: {
       foods: [
@@ -1270,7 +1461,7 @@ function getFallbackFood(query) {
         { emoji: '🥤', name: 'Milkshake', description: 'Thick creamy shake in any flavor' },
         { emoji: '🍧', name: 'Gola / Shaved Ice', description: 'Icy treat with colorful syrups' }
       ],
-      description: "Cool down with these refreshing picks! Cold coffee is the ultimate summer companion, and Gola is pure childhood nostalgia. ❄️"
+      description: "Cool down with these refreshing picks! Cold coffee is the ultimate companion, and Gola is pure nostalgia. ❄️"
     }
   };
 
@@ -1285,7 +1476,7 @@ function getFallbackFood(query) {
       { emoji: '🥘', name: 'Khichdi', description: 'Simple and nourishing' },
       { emoji: '🍜', name: 'Noodles', description: 'Quick and satisfying' }
     ],
-    description: "Not sure exactly what you're craving, but these crowd-pleasers never disappoint! Tell me more specifically — sweet, spicy, cold, or fast food?"
+    description: "Not sure exactly what you're craving, but these crowd-pleasers never disappoint! Tell me — sweet, spicy, cold, or fast food?"
   };
 }
 
@@ -1313,7 +1504,7 @@ function toggleFoodVoice() {
   }
 }
 
-// ─── Text to Speech ───
+// ─── TTS ───
 function speakText(text) {
   if (!window.speechSynthesis || !text) return;
   window.speechSynthesis.cancel();
@@ -1336,7 +1527,6 @@ function setAIResponse(text) {
 }
 
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-
 </script>
 </body>
 </html>
